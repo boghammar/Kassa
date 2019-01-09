@@ -1,15 +1,25 @@
 const { app, BrowserWindow } = require('electron')
+const store = require('electron-settings');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
 
-function createWindow () {
+function createWindow() {
+  var windowState = store.get('window');
   // Create the browser window.
-  win = new BrowserWindow({ width: 800, height: 600, 
+  win = new BrowserWindow({
+    x: windowState && windowState.bounds.x || undefined,
+    y: windowState && windowState.bounds.y || undefined,
+    width: windowState && windowState.bounds.width || 800,
+    height: windowState && windowState.bounds.height || 600,
     title: "Kassa",
     show: false
- })
+  })
+
+  if (windowState && windowState.isMaximized) {
+    win.maximize();
+  }
 
   // and load the index.html of the app.
   win.loadFile('index.html')
@@ -26,9 +36,9 @@ function createWindow () {
   })
 
   // Show when ready, from https://blog.avocode.com/4-must-know-tips-for-building-cross-platform-electron-apps-f3ae9c2bffff
-  win.on('ready-to-show', function() { 
-    win.show(); 
-    win.focus(); 
+  win.on('ready-to-show', function () {
+    win.show();
+    win.focus();
   });
 }
 
@@ -44,6 +54,21 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
   }
+})
+
+// Emitted before the application starts closing its windows.
+app.on('before-quit', () => {
+
+  var max = win.isMaximized();
+  store.set('window', { isMaximized: max });
+
+  var bounds = win.getBounds();
+  store.set('window.bounds', {
+    x: bounds && bounds.x,
+    y: bounds && bounds.y,
+    width: bounds && bounds.width,
+    height: bounds && bounds.height,
+  })
 })
 
 app.on('activate', () => {

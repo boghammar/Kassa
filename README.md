@@ -1,2 +1,2 @@
 # Kassa
-A simple accounting application for small xxx
+A simple accounting application for small associations.

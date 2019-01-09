@@ -5,7 +5,14 @@
     "scripts": {
         "start": "electron ."
     },
-    "devDependencies": {
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/boghammar/Kassa.git"
+      },
+        "devDependencies": {
         "electron": "^4.0.1"
+    },
+    "dependencies": {
+        "electron-settings": "^3.2.0"
     }
 }
