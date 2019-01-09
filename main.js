@@ -1,6 +1,12 @@
 const { app, BrowserWindow } = require('electron')
+const ipc = require('electron-better-ipc');
 const store = require('electron-settings');
 
+// ----------------------------------------------------------------------------
+// Handle render process messages
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
@@ -25,7 +31,7 @@ function createWindow() {
   win.loadFile('index.html')
 
   // Open the DevTools.
-  //win.webContents.openDevTools()
+  win.webContents.openDevTools()
 
   // Emitted when the window is closed.
   win.on('closed', () => {
